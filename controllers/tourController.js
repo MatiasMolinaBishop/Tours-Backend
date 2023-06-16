@@ -4,6 +4,33 @@ const fs = require('fs');
 //We define the variable tour where we will sivae the data after it reads it from the file
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`))
 
+
+//WE DONT WANT TO REPEAT CODE ON ALL ROTES WHERE WE NEED TO CHECK ID SO WE EXPORT THIS FUNCTION / MIDDLEWARE TO BE  USED ON THE ROUTER
+//This will be used as call bak function for the router.param middleware we create on our router file. Therefore it will only apply to tour routes
+exports.checkID = (req, res, next, val) => {// ':' specifies a variable which will be name in this case id
+    console.log(`Tour id is: ${val}`);
+    const id = req.params.id * 1; //This is a nice javascript of turning strings into numbers when the string looks like a number. In this case the id is a string because it comes from the url 
+
+    if (id > tours.length) {
+        //It is important to return as if the id is invalid we cant to end the request response cycle. 
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        })
+    }
+    next()
+}
+
+exports.checkBody = (req, res, next) => {
+    if (!req.body.name || !req.body.price) {
+        return res.status(400).json({
+            status: 'bad request',
+            message: 'Provide name and price'
+        })
+    }
+    next()
+}
+
 exports.getAllTours = (req, res) => {
 
     res.status(200).json({
@@ -17,17 +44,7 @@ exports.getAllTours = (req, res) => {
 }
 
 exports.getTour = (req, res) => {// ':' specifies a variable which will be name in this case id
-    console.log(req.params);
-    const id = req.params.id * 1; //This is a nice javascript of turning strings into numbers when the string looks like a number. In this case the id is a string because it comes from the url 
-
-    if (id > tours.length) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
-
-    const tour = tours.find(el => el.id === id)// This .find() takes a callback function that loops through the array and returns a new array with the element where the id equals the param id value
+    const tour = tours.find(el => el.id === req.params.id * 1)// This .find() takes a callback function that loops through the array and returns a new array with the element where the id equals the param id value
     res.status(200).json({
         status: 'success',
         data: {
@@ -36,6 +53,7 @@ exports.getTour = (req, res) => {// ':' specifies a variable which will be name 
 
     })
 }
+
 
 exports.createTour = (req, res) => {
     console.log(req.body);
@@ -57,14 +75,6 @@ exports.createTour = (req, res) => {
 }
 
 exports.updateTour = (req, res) => {
-    console.log(req.params.id)
-
-    if (req.params.id * 1 > tours.length) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
     res.status(200).json({
         status: 'success',
         results: tours.length,
@@ -74,14 +84,7 @@ exports.updateTour = (req, res) => {
 }
 
 exports.deleteTour = (req, res) => {
-    console.log(req.params.id)
 
-    if (req.params.id * 1 > tours.length) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
     res.status(204).json({
         status: 'success',
         data: null,

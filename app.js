@@ -14,7 +14,17 @@ const app = express();
 
 app.use(express.json()); //// This is the middleware we need to have the data into the req. Function that can modify the incoming request data
 //its called middleware because it stands in between the request and the response
-app.use(morgan('dev'))
+//We want to use only morgean during development. So it will only run while we are on our development envornment.
+if (process.env.NODE_ENV === 'developement') {
+    app.use(morgan('dev'))
+}
+
+//To be able to serve static files we need the follwoing builtin middleware. It is not our case as we will only have API endpoinst 
+//Without this we cannot serve files that are satung in the public folder. HTM, img etc
+app.use(express.static(`${__dirname}/public`))
+
+
+
 app.use((req, res, next) => {
     console.log('Middle wares must always call the next() 👽')
     next()
