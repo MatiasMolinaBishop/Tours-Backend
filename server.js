@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 //GOOD PRACTICE TO KEEP THINGS RELATED TO THE SERVER ON A SEPERATE FILE FORM EXPRESS
-//This file doesnt know about teh app so we must import it
+//This file doesnt know about the app so we must import it
 const dotenv = require('dotenv')
 
 
@@ -30,10 +30,9 @@ const app = require('./app')
 console.log(app.get('env'))
 //Node sets up a lot of environment variables by default. We can check those by logging like below
 //console.log(process.env)
-
 //TO SET UP ENVIRONMENT VARIABLES WE DO AS FOLLOWS on the terminal
 //NODE_ENV=development nodemon server.js
-//More commonly we do it by crating a configuration file
+//More commonly we do it by crating a configuration file - config.env
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {//Call back function that will be called as soon as server starts listening

@@ -1,11 +1,11 @@
 const fs = require('fs');
 //We read the file syncronously first since its the first thing the app will do. It wont block the code
 //We are using the data within dev-data to simulate the tours before we have a data base
-//We define the variable tour where we will sivae the data after it reads it from the file
+//We define the variable tour where we will save the data after it reads it from the file
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`))
 
 
-//WE DONT WANT TO REPEAT CODE ON ALL ROTES WHERE WE NEED TO CHECK ID SO WE EXPORT THIS FUNCTION / MIDDLEWARE TO BE  USED ON THE ROUTER
+//WE DONT WANT TO REPEAT CODE ON ALL ROUTES WHERE WE NEED TO CHECK ID SO WE EXPORT THIS FUNCTION / MIDDLEWARE TO BE  USED ON THE ROUTER
 //This will be used as call bak function for the router.param middleware we create on our router file. Therefore it will only apply to tour routes
 exports.checkID = (req, res, next, val) => {// ':' specifies a variable which will be name in this case id
     console.log(`Tour id is: ${val}`);

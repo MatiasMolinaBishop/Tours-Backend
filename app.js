@@ -1,8 +1,8 @@
 //Separation of concerns is important.
 //This app.js file is usually used for middleware declarations / Express set up
 
-const express = require('express');//We install express and create app.js file where we require express and store it ion a variable
-const morgan = require('morgan');
+const express = require('express');//We install express and create app.js file where we require express and store it on a variable
+const morgan = require('morgan'); //middle ware to log http rewuests and their corresponding infos
 
 //WE REQUIRE THE ROUTERS WE CREATE ON routes file
 const tourRouter = require('./routes/tourRoutes')
@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'developement') {
 }
 
 //To be able to serve static files we need the follwoing builtin middleware. It is not our case as we will only have API endpoinst 
-//Without this we cannot serve files that are satung in the public folder. HTM, img etc
+//Without this we cannot serve files that are in the public folder. HTM, img etc we would need this if we had handlebarsl..
 app.use(express.static(`${__dirname}/public`))
 
 
@@ -36,25 +36,16 @@ app.use((req, res, next) => {
 })
 
 
-//2) ROUTE HABDLERS
+//2) ROUTE HANDLERS
 
 //3) ROUTES
 
-//We define a router and use it instead of app
 //This is actually a middleware so to be able to use it we must we must app.use
-//First we define the route and then call the middleware tourRputes as callback function
+//First we define the route and then call the middleware tourRoutes as callback function
 
 //THIS IS WHERE WE MOUNT OUR ROUTERS
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 
-
-//4) START SERVER
-//envionment variable that tells the absolute of the directory
-//console.log(__dirname)
-// const port = 3000;
-// app.listen(port, () => {//Call back function that will be called as soon as server starts listening
-//     console.log(`App runing on port ${port}...`)
-// })
 
 module.exports = app
